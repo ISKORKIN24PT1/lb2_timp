@@ -1,7 +1,7 @@
 #include "modAlphaCipher.h"
 #include <cctype>
 #include <algorithm>
-#include <cwctype>  // Добавлен для wide character функций
+#include <cwctype>
 
 modAlphaCipher::modAlphaCipher(const std::wstring& skey) {
     for (size_t i = 0; i < numAlpha.size(); ++i) {
@@ -17,7 +17,7 @@ wchar_t modAlphaCipher::toUpper(wchar_t c) {
     if (c == L'ё') {
         return L'Ё';
     }
-    return std::towupper(c);  // Исправлено на towupper
+    return std::towupper(c);
 }
 
 std::wstring modAlphaCipher::getValidKey(const std::wstring& s) {
@@ -26,10 +26,10 @@ std::wstring modAlphaCipher::getValidKey(const std::wstring& s) {
     }
     std::wstring tmp(s);
     for (auto& c : tmp) {
-        if (!std::iswalpha(c)) {  // Исправлено на std::iswalpha
+        if (!std::iswalpha(c)) {
             throw cipher_error("Invalid key: non-alphabetic character");
         }
-        if (std::iswlower(c)) {   // Исправлено на std::iswlower
+        if (std::iswlower(c)) {
             c = toUpper(c);
         }
     }
@@ -39,8 +39,8 @@ std::wstring modAlphaCipher::getValidKey(const std::wstring& s) {
 std::wstring modAlphaCipher::getValidOpenText(const std::wstring& s) {
     std::wstring tmp;
     for (auto c : s) {
-        if (std::iswalpha(c)) {   // Исправлено на std::iswalpha
-            if (std::iswlower(c)) { // Исправлено на std::iswlower
+        if (std::iswalpha(c)) {
+            if (std::iswlower(c)) {
                 tmp.push_back(toUpper(c));
             } else {
                 tmp.push_back(c);
@@ -54,11 +54,8 @@ std::wstring modAlphaCipher::getValidOpenText(const std::wstring& s) {
 }
 
 std::wstring modAlphaCipher::getValidCipherText(const std::wstring& s) {
-    if (s.empty()) {
-        throw cipher_error("Empty cipher text");
-    }
     for (auto c : s) {
-        if (!std::iswupper(c)) {  // Исправлено на std::iswupper
+        if (!std::iswupper(c)) {
             throw cipher_error("Incorrect data entry");
         }
     }
